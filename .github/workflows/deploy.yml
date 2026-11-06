@@ -1,0 +1,44 @@
+name: 배포
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: pages
+        uses: actions/configure-pages@v6
+      - name: 공개할 파일만 모으기
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          BASE_URL: ${{ steps.pages.outputs.base_url }}
+        run: |
+          mkdir _site
+          cp -r index.html og.png vendor _site/
+          # 서버 주소와 공개 키는 저장소에 두지 않고 배포할 때만 넣음
+          jq --arg u "$SUPABASE_URL" --arg s "$SUPABASE_KEY" '.supabaseUrl=$u | .supabaseKey=$s' config.json > _site/config.json
+          # 카톡·메일 링크 미리보기 이미지는 전체 주소여야 함
+          sed -i "s#__BASE_URL__#${BASE_URL%/}#g" _site/index.html
+          grep -o 'og:image" content="[^"]*' _site/index.html
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v5

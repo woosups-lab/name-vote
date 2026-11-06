@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>법인명 스티커 보드</title>
+<meta name="description" content="남동 데이터센터 법인명 후보 중 마음에 드는 이름에 스티커를 붙여주세요. 투표 현황은 실시간으로 볼 수 있습니다.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="남동 데이터센터 법인명 스티커 보드">
+<meta property="og:description" content="마음에 드는 법인명에 스티커를 붙여주세요. 링크만 있으면 누구나 참여할 수 있고, 현황은 실시간으로 보입니다.">
+<meta property="og:image" content="__BASE_URL__/og.png">
+<meta property="og:url" content="__BASE_URL__/">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="theme-color" content="#0b2545">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%233a86ff%27/%3E%3Ccircle cx=%2711%27 cy=%2711%27 r=%274%27 fill=%27%23fff%27 opacity=%27.5%27/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#16202c; --muted:#5d6b7a; --line:#dde3ea; --bg:#eef2f6; --card:#fff;
+  --blue:#0a6cc2; --blue-ink:#07508f; --navy:#0b2545; --chip:#f2f4f7;
+  --cork:#f6efe2; --cork-dot:#e6d9bf; --ok:#14a06b; --warn:#d9822b; --bad:#d64545;
+  --r:16px; --shadow:0 1px 2px rgba(16,32,48,.06),0 8px 24px rgba(16,32,48,.08);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "Pretendard","Apple SD Gothic Neo","Malgun Gothic","맑은 고딕","Noto Sans KR",system-ui,sans-serif;word-break:keep-all;overflow-wrap:anywhere}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+
+/* 상단 */
+.hero{background:radial-gradient(1200px 400px at 85% -10%,#1d5fa8 0%,transparent 60%),linear-gradient(160deg,#0b2545 0%,#0f2f57 60%,#123a6b 100%);color:#fff;padding:40px 0 92px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);background-size:22px 22px;mask-image:linear-gradient(180deg,#000 30%,transparent);pointer-events:none}
+.hero .wrap{position:relative;z-index:1}
+.eyebrow{display:inline-block;font-size:13px;letter-spacing:.08em;color:#bcd6f5;border:1px solid rgba(188,214,245,.35);border-radius:99px;padding:3px 12px}
+.hero h1{font-size:clamp(28px,5vw,46px);line-height:1.2;margin:14px 0 8px;letter-spacing:-.02em}
+.hero .lead{font-size:clamp(16px,2.2vw,19px);color:#dbe8f7;margin:0}
+.hero .dots{position:absolute;right:16px;top:28px;display:flex;gap:10px;opacity:.9}
+.hero .dots i{width:30px;height:30px;border-radius:50%;box-shadow:inset -3px -4px 0 rgba(0,0,0,.15),0 3px 6px rgba(0,0,0,.25)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:6px 14px;font-size:14px}
+.pill b{font-variant-numeric:tabular-nums}
+.led{width:9px;height:9px;border-radius:50%;background:#9aa7b5}
+.led.on{background:#2fd38a;box-shadow:0 0 0 0 rgba(47,211,138,.6);animation:pulse 2s infinite}
+.led.wait{background:#f1b44c}.led.off{background:#ff7a7a}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(47,211,138,0)}100%{box-shadow:0 0 0 0 rgba(47,211,138,0)}}
+
+/* 안내 */
+.panel{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow)}
+.guide{margin-top:-64px;position:relative;z-index:2;padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.guide .g{display:flex;gap:12px;align-items:flex-start}
+.guide .ic{flex:none;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#e8f1fb;color:var(--blue);font-size:19px}
+.guide h3{margin:0 0 2px;font-size:15px}
+.guide p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
+.guide .g.ref .ic{background:#fff3e3;color:var(--warn)}
+
+.note-ref{margin:16px 0 0;padding:14px 18px;border-radius:12px;background:#fff8ec;border:1px solid #f4dcb4;color:#6b4a14;font-size:14.5px;display:flex;gap:10px;align-items:flex-start}
+.note-ref strong{color:#8a5a0b}
+
+/* 공유 */
+.share{margin-top:16px;padding:18px 20px;display:grid;grid-template-columns:auto 1fr;gap:10px 24px;align-items:center}
+.share .k{font-size:13px;color:var(--muted);white-space:nowrap}
+.share .period{font-weight:700;font-size:16px}
+.linkrow{display:flex;gap:8px;flex-wrap:wrap}
+.linkrow input{flex:1 1 260px;min-width:0;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#f8fafc;font-size:14px;color:#334}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:#b9c4d0}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue-ink)}
+.btn.kakao{background:#fee500;border-color:#f2d900;color:#191600}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn.danger{color:var(--bad)}
+
+/* 내 스티커 */
+.mybar{margin:22px 0 12px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
+.mybar h2{margin:0;font-size:20px}
+.mybar .right{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.swatches{display:flex;gap:6px;align-items:center}
+.swatches span{font-size:13px;color:var(--muted);margin-right:4px}
+.sw{width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);padding:0}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.mine-state{font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.mine-state b{color:var(--ink)}
+
+/* 보드 */
+.board{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;border:2px solid transparent;transition:border-color .2s}
+.card.picked{border-color:var(--blue)}
+.card-head{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#eef1f5;border-bottom:1px solid var(--line)}
+.card-head .no{color:var(--blue);font-weight:800;font-size:17px;white-space:nowrap}
+.card-head .tag{font-weight:700;font-size:16px;flex:1;min-width:0}
+.count{display:flex;align-items:baseline;gap:3px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:2px 12px 2px 10px;white-space:nowrap}
+.count b{font-size:22px;line-height:1.3;color:var(--blue);font-variant-numeric:tabular-nums}
+.count small{color:var(--muted);font-size:12px}
+.count.bump{animation:bump .5s}
+@keyframes bump{30%{transform:scale(1.18)}}
+.card-body{padding:18px 18px 14px;text-align:center}
+.card-body .name{margin:0;font-size:clamp(30px,4.4vw,46px);line-height:1.2;color:var(--blue);font-weight:800;letter-spacing:-.01em}
+.card-body .en{margin:6px 0 14px;font-size:clamp(12px,1.5vw,15px);letter-spacing:.32em;color:#7a838d;font-weight:700}
+.parts{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px}
+.chip{background:var(--chip);border:1px solid #d8dde3;border-radius:10px;padding:6px 12px;min-width:76px}
+.chip b{display:block;font-size:19px;line-height:1.25}
+.chip small{display:block;font-size:12px;color:#5f6770}
+.plus{color:#9aa3ad;font-weight:800;font-size:18px}
+.meaning{margin:14px auto 0;border:1.5px solid var(--blue);border-radius:8px;padding:8px 14px;display:flex;gap:12px;justify-content:center;align-items:baseline;font-weight:600;font-size:14.5px;text-align:left}
+.meaning span{color:var(--blue);font-weight:800;flex:none}
+
+.zone{position:relative;margin:0 14px 14px;height:168px;border-radius:12px;background-color:var(--cork);background-image:radial-gradient(var(--cork-dot) 1.2px,transparent 1.3px);background-size:16px 16px;border:2px dashed #dcc9a4;cursor:crosshair;touch-action:manipulation;outline:none;overflow:hidden}
+.zone:focus-visible{border-color:var(--blue)}
+.zone .hint{position:absolute;inset:0;display:grid;place-items:center;color:#a88f62;font-weight:700;font-size:14px;pointer-events:none;transition:opacity .3s;text-align:center;padding:0 12px}
+.zone.has .hint{opacity:0}
+.zone.closed{cursor:not-allowed;filter:saturate(.85)}
+.zone .ghost{position:absolute;opacity:.45;pointer-events:none;display:none}
+.zone:hover .ghost.show{display:block}
+
+.st{--s:30px;position:absolute;width:var(--s);height:var(--s);margin:calc(var(--s)/-2) 0 0 calc(var(--s)/-2);border-radius:50%;pointer-events:none;background:var(--c);
+  box-shadow:inset -3px -4px 0 rgba(0,0,0,.13),inset 2px 3px 0 rgba(255,255,255,.35),0 2px 3px rgba(60,40,10,.28);transform:rotate(var(--rot,0deg))}
+.st::after{content:"";position:absolute;left:22%;top:16%;width:30%;height:22%;border-radius:50%;background:rgba(255,255,255,.55);filter:blur(.5px)}
+.st.mine{z-index:5;outline:3px solid #fff;box-shadow:0 0 0 5px var(--ink),0 4px 10px rgba(0,0,0,.3)}
+.st.mine::before{content:"나";position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);transform:rotate(calc(var(--rot,0deg)*-1))}
+.st.pop{animation:pop .45s cubic-bezier(.2,1.6,.4,1)}
+.st.pending{opacity:.6}
+@keyframes pop{0%{transform:scale(1.9) rotate(var(--rot));opacity:0}100%{transform:scale(1) rotate(var(--rot));opacity:1}}
+.c0{--c:#f2545b}.c1{--c:#ff9f1c}.c2{--c:#ffd23f}.c3{--c:#3bceac}.c4{--c:#0ead69}.c5{--c:#3a86ff}.c6{--c:#8338ec}.c7{--c:#ff5fa2}
+
+/* 현황 */
+.tally{margin-top:24px;padding:20px}
+.tally h2,.propose h2{margin:0 0 4px;font-size:20px}
+.sub{margin:0 0 14px;color:var(--muted);font-size:14px}
+.bar{display:grid;grid-template-columns:minmax(120px,210px) 1fr 86px;gap:12px;align-items:center;padding:7px 0}
+.bar .lbl{font-weight:700;font-size:14.5px}
+.bar .lbl em{font-style:normal;color:var(--blue);margin-right:6px}
+.bar .track{height:14px;border-radius:99px;background:#edf1f5;overflow:hidden}
+.bar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2f8ce0,#0a6cc2);width:0;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.bar .num{text-align:right;font-variant-numeric:tabular-nums;font-size:14px}
+.bar .num b{font-size:16px}
+
+/* 제안 */
+.propose{margin-top:18px;padding:20px}
+.propose form{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.field{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.field.full{grid-column:1/-1}
+.field input,.field textarea{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;color:var(--ink);background:#fff;resize:vertical}
+.field input:focus,.field textarea:focus{outline:2px solid #bfdaf5;border-color:var(--blue)}
+.propose .actions{grid-column:1/-1;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.private{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:#5b6b7b;background:#f1f4f8;border-radius:8px;padding:4px 10px}
+
+footer{margin:28px 0 40px;color:var(--muted);font-size:13px;text-align:center}
+footer .ref{max-width:760px;margin:0 auto 12px}
+.linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:13px;padding:4px}
+
+/* 알림 */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:#16202c;color:#fff;padding:11px 18px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;z-index:50;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.err{background:#a52b2b}
+
+/* 관리자 */
+dialog{border:0;border-radius:16px;padding:0;width:min(760px,calc(100vw - 24px));max-height:calc(100vh - 40px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(10,20,35,.5)}
+.dlg-h{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.dlg-h h3{margin:0;font-size:18px}
+.dlg-b{padding:18px 20px;display:grid;gap:18px}
+.dlg-b h4{margin:0 0 8px;font-size:15px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.row .field{flex:1 1 200px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:#f5f7fa;border-radius:10px;padding:10px 12px}
+.stat b{display:block;font-size:22px}
+.stat small{color:var(--muted)}
+.props{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.props li{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;gap:12px;justify-content:space-between;align-items:flex-start}
+.props .pn{font-weight:800;font-size:16px}
+.props .pr{color:#3b4855;font-size:14px;white-space:pre-wrap}
+.props .pm{color:var(--muted);font-size:12px}
+.err{color:var(--bad);font-size:13px;min-height:1em}
+.hidden{display:none!important}
+
+@media (max-width:980px){.guide{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){
+  .hero{padding:28px 0 84px}.hero .dots{display:none}
+  .guide{grid-template-columns:1fr;gap:12px;padding:16px}
+  .board{grid-template-columns:1fr;gap:14px}
+  .share{grid-template-columns:1fr;gap:6px}
+  .share .k{margin-top:6px}
+  .bar{grid-template-columns:1fr 70px;gap:4px 10px}
+  .bar .track{grid-column:1/-1;grid-row:2}
+  .propose form{grid-template-columns:1fr}
+  .zone{height:150px}
+  .stats{grid-template-columns:1fr 1fr 1fr}
+  .card-head .tag{font-size:14.5px}
+  .parts{gap:4px}.chip{min-width:0;padding:5px 9px}.chip b{font-size:16px}.chip small{font-size:11px}.plus{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="dots" aria-hidden="true"><i class="c0" style="background:var(--c)"></i><i class="c2" style="background:var(--c)"></i><i class="c3" style="background:var(--c)"></i><i class="c5" style="background:var(--c)"></i></div>
+    <span class="eyebrow">남동공단 데이터센터 사업</span>
+    <h1 id="title">법인명 선정 스티커 보드</h1>
+    <p class="lead">후보 중 <b>마음에 드는 이름 하나</b>를 골라 스티커를 붙여주세요.</p>
+    <div class="pills">
+      <span class="pill"><i class="led" id="led"></i><span id="statusText">불러오는 중…</span></span>
+      <span class="pill">지금까지 붙은 스티커 <b id="total">0</b>장</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel guide" aria-label="참여 방법">
+    <div class="g"><div class="ic">●</div><div><h3>스티커 붙이기</h3><p>마음에 드는 법인명 아래 <b>스티커 붙이는 곳</b>을 누르면 누른 자리에 스티커가 붙습니다. 기기 한 대에 한 장이며, 마감 전까지 옮기거나 뗄 수 있습니다.</p></div></div>
+    <div class="g"><div class="ic">↻</div><div><h3>실시간 현황</h3><p>누가 붙이든 모든 사람 화면에 바로 나타납니다. <b>마감 전까지 언제든</b> 이 화면에서 투표 현황을 볼 수 있습니다.</p></div></div>
+    <div class="g"><div class="ic">✉</div><div><h3>동료에게 보내기</h3><p>아래 링크를 <b>카톡이나 이메일</b>로 보내주세요. 링크를 받은 사람도 로그인 없이 바로 투표할 수 있습니다.</p></div></div>
+    <div class="g ref"><div class="ic">!</div><div><h3>참고용 투표</h3><p>결과는 법인명 선정의 <b>참고 자료</b>로만 활용합니다. 가장 많이 나온 이름으로 정해지는 것은 아닙니다.</p></div></div>
+  </section>
+
+  <p class="note-ref"><span aria-hidden="true">📌</span><span><strong>안내</strong> 본 투표는 법인명 선정에 참고하기 위한 의견 수렴입니다. <strong>스티커를 가장 많이 받은 이름이 반드시 법인명으로 선정되는 것은 아니며</strong>, 최종 법인명은 회사가 여러 요소를 종합적으로 검토하여 결정합니다.</span></p>
+
+  <section class="panel share" aria-label="투표 기간과 링크">
+    <div class="k">투표 기간</div>
+    <div class="period" id="period">-</div>
+    <div class="k">투표 링크</div>
+    <div class="linkrow">
+      <input id="link" readonly aria-label="투표 링크">
+      <button class="btn primary" id="btnCopy" type="button">링크 복사</button>
+      <button class="btn kakao" id="btnCopyMsg" type="button">카톡용 문구 복사</button>
+      <a class="btn" id="btnMail" href="#">이메일로 보내기</a>
+      <button class="btn hidden" id="btnShare" type="button">공유…</button>
+    </div>
+  </section>
+
+  <div class="mybar">
+    <h2>법인명 후보</h2>
+    <div class="right">
+      <div class="swatches" id="swatches"><span>내 스티커 색</span></div>
+      <div class="mine-state"><span id="mineText">아직 스티커를 붙이지 않았습니다</span><button class="btn sm hidden" id="btnRemove" type="button">스티커 떼기</button></div>
+    </div>
+  </div>
+
+  <section class="board" id="board" aria-live="polite"></section>
+
+  <section class="panel tally" aria-label="투표 현황">
+    <h2>투표 현황</h2>
+    <p class="sub">실시간으로 갱신됩니다. 마감 전까지 언제든 확인할 수 있습니다.</p>
+    <div id="bars"></div>
+  </section>
+
+  <section class="panel propose" aria-label="새 이름 제안">
+    <h2>새로운 이름 제안</h2>
+    <p class="sub">더 좋은 이름이 떠오르셨나요? 의견으로 보내주세요.<br>
+      <span class="private">🔒 제안은 투표 대상이 아니며 보드에 공개되지 않고, 담당자만 확인하여 검토 의견으로 참고합니다.</span></p>
+    <form id="proposeForm">
+      <label class="field">제안하는 이름 (필수)<input name="name" maxlength="40" required placeholder="예: 남동 ○○○"></label>
+      <label class="field">보내는 사람 (선택)<input name="proposer" maxlength="30" placeholder="이름 또는 부서"></label>
+      <label class="field full">이름의 의미나 제안 이유 (선택)<textarea name="reason" maxlength="500" rows="3" placeholder="어떤 뜻을 담았는지 적어주세요"></textarea></label>
+      <div class="actions"><button class="btn primary" type="submit" id="btnPropose">제안 보내기</button><span class="sub" id="proposeMsg" style="margin:0"></span></div>
+    </form>
+  </section>
+
+  <footer>
+    <p class="ref">본 투표 결과는 법인명 선정에 참고하며, 가장 많은 스티커를 받은 이름이 반드시 선정되는 것은 아닙니다.</p>
+    <button class="linkbtn" id="btnAdmin" type="button">관리자</button>
+  </footer>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+
+<dialog id="dlg">
+  <div class="dlg-h"><h3>관리자</h3><button class="btn sm" id="dlgClose" type="button">닫기</button></div>
+  <form class="dlg-b" id="loginBox">
+    <p class="sub" style="margin:0">관리자로 등록된 이메일과 비밀번호로 들어옵니다.</p>
+    <label class="field">이메일<input type="email" id="adEmail" autocomplete="username" required></label>
+    <label class="field">비밀번호<input type="password" id="adPw" autocomplete="current-password" required></label>
+    <div class="row"><button class="btn primary" type="submit">로그인</button><span class="err" id="loginErr"></span></div>
+  </form>
+  <div class="dlg-b hidden" id="adminBox">
+    <div>
+      <h4>투표 기간 (한국 시간)</h4>
+      <div class="row">
+        <label class="field">시작<input type="datetime-local" id="adOpen"></label>
+        <label class="field">마감<input type="datetime-local" id="adClose"></label>
+        <button class="btn primary" id="adSave" type="button">기간 저장</button>
+      </div>
+      <p class="sub" style="margin:6px 0 0">비워 두면 시작은 바로, 마감은 없음입니다. 저장하면 모든 사람 화면에 바로 반영됩니다.</p>
+      <p class="err" id="adErr"></p>
+    </div>
+    <div>
+      <h4>참여 현황</h4>
+      <div class="stats">
+        <div class="stat"><b id="sStickers">-</b><small>붙은 스티커</small></div>
+        <div class="stat"><b id="sDevices">-</b><small>참여 기기</small></div>
+        <div class="stat"><b id="sSuspect">-</b><small>같은 기기 의심</small></div>
+      </div>
+      <p class="sub" style="margin:6px 0 0">같은 기기 의심: 같은 인터넷 주소와 같은 기기 특징으로 붙은 추가 스티커 수입니다. 사내 같은 기종 PC는 겹칠 수 있어 참고만 하세요.</p>
+    </div>
+    <div>
+      <div class="row" style="justify-content:space-between;align-items:center"><h4 style="margin:0">받은 이름 제안 <span id="pCount"></span></h4><span><button class="btn sm" id="adCopyProps" type="button">목록 복사</button> <button class="btn sm" id="adReload" type="button">새로고침</button></span></div>
+      <ul class="props" id="props" style="margin-top:10px"></ul>
+    </div>
+    <div class="row"><button class="btn sm" id="adLogout" type="button">로그아웃</button></div>
+  </div>
+</dialog>
+
+<script src="vendor/supabase.js"></script>
+<script>
+"use strict";
+const POLL = new URLSearchParams(location.search).get("poll") || "namdong";
+const DEMO = new URLSearchParams(location.search).has("demo");
+const COLORS = 8, TZ = "Asia/Seoul";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const ls = { get: k => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
+
+/* ---------- 기기 키: 이 브라우저를 구별하는 무작위 값. 서버에는 해시로만 남는다 ---------- */
+function deviceKey() {
+  const name = "vote.device";
+  let k = ls.get(name) || (document.cookie.match(/(?:^|; )vote_device=([\w-]+)/) || [])[1];
+  if (!k) k = (crypto.randomUUID ? crypto.randomUUID() : Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, "0")).join(""));
+  ls.set(name, k);
+  document.cookie = `vote_device=${k}; max-age=31536000; path=/; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+  return k;
+}
+const DEVICE = deviceKey();
+/* 기기 특징: 같은 폰의 카톡 브라우저와 크롬처럼 다른 브라우저를 관리자가 참고로 볼 수 있게 함 */
+async function fingerprint() {
+  const s = [screen.width, screen.height, devicePixelRatio, Intl.DateTimeFormat().resolvedOptions().timeZone, navigator.hardwareConcurrency,
+    navigator.deviceMemory, navigator.maxTouchPoints, navigator.platform, (navigator.languages || []).join()].join("|");
+  try { const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return Array.from(new Uint8Array(h).slice(0, 16), b => b.toString(16).padStart(2, "0")).join(""); }
+  catch { return null; }
+}
+let FP = null; fingerprint().then(v => FP = v);
+
+/* ---------- 서버 (Supabase) ---------- */
+function supabaseBackend(cfg) {
+  const sb = supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey, { auth: { persistSession: true, autoRefreshToken: true, storageKey: "vote.auth.session" } });
+  const rpc = async (fn, args) => { const { data, error } = await sb.rpc(fn, args); if (error) throw error; return data; };
+  return {
+    async poll() { const { data, error } = await sb.from("vote_polls").select("*").eq("id", POLL).maybeSingle(); if (error) throw error; return data; },
+    async stickers() { const { data, error } = await sb.from("vote_stickers").select("id,option_id,x,y,color").eq("poll_id", POLL); if (error) throw error; return data; },
+    mine: () => rpc("vote_mine", { p_poll: POLL, p_device: DEVICE }),
+    place: (o, x, y, c) => rpc("vote_place", { p_poll: POLL, p_device: DEVICE, p_option: o, p_x: x, p_y: y, p_color: c, p_fp: FP }),
+    remove: () => rpc("vote_remove", { p_poll: POLL, p_device: DEVICE }),
+    propose: (name, reason, proposer) => rpc("vote_propose", { p_poll: POLL, p_device: DEVICE, p_name: name, p_reason: reason, p_proposer: proposer }),
+    subscribe(on) {
+      const ch = sb.channel("vote-" + POLL)
+        .on("postgres_changes", { event: "INSERT", schema: "public", table: "vote_stickers", filter: `poll_id=eq.${POLL}` }, p => on.sticker(p.new))
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "vote_stickers", filter: `poll_id=eq.${POLL}` }, p => on.sticker(p.new))
+        .on("postgres_changes", { event: "DELETE", schema: "public", table: "vote_stickers" }, p => on.gone(p.old.id))
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "vote_polls", filter: `id=eq.${POLL}` }, p => on.poll(p.new))
+        .subscribe(st => on.status(st === "SUBSCRIBED" ? "on" : st === "CHANNEL_ERROR" || st === "TIMED_OUT" || st === "CLOSED" ? "off" : "wait"));
+      return () => sb.removeChannel(ch);
+    },
+    admin: {
+      async session() { const { data } = await sb.auth.getSession(); return !!data.session && (await rpc("vote_is_admin")) === true; },
+      async signIn(email, password) {
+        const { error } = await sb.auth.signInWithPassword({ email, password }); if (error) throw error;
+        if ((await rpc("vote_is_admin")) !== true) { await sb.auth.signOut({ scope: "local" }); throw new Error("관리자 계정이 아닙니다"); }
+      },
+      signOut: () => sb.auth.signOut({ scope: "local" }),
+      async setPeriod(opens_at, closes_at) { const { error } = await sb.from("vote_polls").update({ opens_at, closes_at }).eq("id", POLL); if (error) throw error; },
+      stats: () => rpc("vote_admin_stats", { p_poll: POLL }),
+      async proposals() { const { data, error } = await sb.from("vote_proposals").select("*").eq("poll_id", POLL).order("created_at", { ascending: false }); if (error) throw error; return data; },
+      async delProposal(id) { const { error } = await sb.from("vote_proposals").delete().eq("id", id); if (error) throw error; },
+    },
+  };
+}
+
+/* ---------- 미리보기 (?demo): 서버 없이 이 브라우저 안에서만 동작. 탭끼리 실시간 공유 ---------- */
+async function demoBackend() {
+  const opts = await fetch("demo.json").then(r => r.ok ? r.json() : null).catch(() => null)
+    || ["가", "나", "다", "라"].map((n, i) => ({ id: String(i + 1), no: `${i + 1}안`, tagline: "후보 설명", name: `후보 ${n}`, en: `CANDIDATE ${i + 1}`, parts: [["A", "첫째"], ["B", "둘째"]], meaning: "이름의 의미" }));
+  const K = "vote.demo." + POLL, bc = "BroadcastChannel" in window ? new BroadcastChannel(K) : null;
+  const load = () => JSON.parse(ls.get(K) || "null") || { poll: { id: POLL, title: "법인명 선정 스티커 보드", options: opts, opens_at: null, closes_at: null }, stickers: [], devices: {}, proposals: [] };
+  let db = load(); db.poll.options = opts;
+  const fill = +new URLSearchParams(location.search).get("fill") || 0;
+  if (fill && db.stickers.length < fill) for (let i = db.stickers.length; i < fill; i++) { const o = opts[Math.floor(Math.pow(Math.random(), 1.4) * opts.length)]; db.stickers.push({ id: "s" + i, option_id: o.id, x: .06 + Math.random() * .88, y: .14 + Math.random() * .72, color: i % COLORS }); }
+  const save = () => { ls.set(K, JSON.stringify(db)); bc?.postMessage(1); };
+  let on = null;
+  bc && (bc.onmessage = () => { db = load(); db.poll.options = opts; on?.reload(); });
+  const open = () => { const n = Date.now(), p = db.poll; if (p.opens_at && n < Date.parse(p.opens_at)) throw new Error("아직 투표 시작 전입니다"); if (p.closes_at && n >= Date.parse(p.closes_at)) throw new Error("투표가 마감되었습니다"); };
+  return {
+    poll: async () => db.poll, stickers: async () => db.stickers, mine: async () => db.devices[DEVICE] || null,
+    async place(o, x, y, c) { open(); let id = db.devices[DEVICE], s = db.stickers.find(s => s.id === id); if (!s) { s = { id: "d" + Date.now() }; db.stickers.push(s); db.devices[DEVICE] = s.id; } Object.assign(s, { option_id: o, x, y, color: c }); save(); on?.sticker(s); return s.id; },
+    async remove() { open(); const id = db.devices[DEVICE]; db.stickers = db.stickers.filter(s => s.id !== id); delete db.devices[DEVICE]; save(); on?.gone(id); },
+    async propose(name, reason, proposer) { open(); db.proposals.unshift({ id: "p" + Date.now(), name, reason, proposer, created_at: new Date().toISOString() }); save(); },
+    subscribe(h) { on = h; setTimeout(() => h.status("on"), 300); return () => {}; },
+    admin: {
+      session: async () => !!sessionStorage.getItem("vote.demo.admin"), async signIn() { sessionStorage.setItem("vote.demo.admin", 1); }, async signOut() { sessionStorage.removeItem("vote.demo.admin"); },
+      async setPeriod(a, b) { db.poll.opens_at = a; db.poll.closes_at = b; save(); on?.poll(db.poll); },
+      stats: async () => ({ stickers: db.stickers.length, devices: Object.keys(db.devices).length, suspect: 0 }),
+      proposals: async () => db.proposals, async delProposal(id) { db.proposals = db.proposals.filter(p => p.id !== id); save(); },
+    },
+  };
+}
+
+/* ---------- 화면 상태 ---------- */
+let api, poll = null, mineId = null, live = "wait";
+const stickers = new Map();
+let myColor = +(ls.get("vote.color") ?? Math.floor(Math.random() * COLORS)) % COLORS;
+
+function phase() {
+  if (!poll) return "load";
+  const n = Date.now();
+  if (poll.opens_at && n < Date.parse(poll.opens_at)) return "before";
+  if (poll.closes_at && n >= Date.parse(poll.closes_at)) return "closed";
+  return "open";
+}
+const fmt = iso => new Intl.DateTimeFormat("ko-KR", { timeZone: TZ, month: "numeric", day: "numeric", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(iso));
+function left(ms) {
+  const m = Math.max(0, Math.floor(ms / 60000)), d = Math.floor(m / 1440), h = Math.floor(m % 1440 / 60), mm = m % 60;
+  return d ? `${d}일 ${h}시간` : h ? `${h}시간 ${mm}분` : `${Math.max(mm, 1)}분`;
+}
+function renderStatus() {
+  const ph = phase(), led = $("#led");
+  let t = "불러오는 중…";
+  if (ph === "before") t = `투표 시작 전 · ${fmt(poll.opens_at)} 시작`;
+  else if (ph === "open") t = poll.closes_at ? `투표 진행 중 · 마감까지 ${left(Date.parse(poll.closes_at) - Date.now())}` : "투표 진행 중";
+  else if (ph === "closed") t = "투표가 마감되었습니다 · 최종 현황";
+  $("#statusText").textContent = t;
+  led.className = "led " + (ph === "closed" ? "" : live);
+  led.title = live === "on" ? "실시간 연결됨" : live === "off" ? "실시간 연결이 끊겨 잠시 후 다시 연결합니다" : "연결 중";
+  if (poll) $("#period").textContent = `${poll.opens_at ? fmt(poll.opens_at) : "지금부터"} ~ ${poll.closes_at ? fmt(poll.closes_at) + " 마감" : "마감일 미정"}`;
+  document.querySelectorAll(".zone").forEach(z => {
+    z.classList.toggle("closed", ph !== "open");
+    z.querySelector(".hint").textContent = ph === "open" ? "여기를 눌러 스티커 붙이기" : ph === "before" ? "투표 시작 전입니다" : "투표가 마감되었습니다";
+  });
+  $("#btnRemove").disabled = ph !== "open";
+}
+
+function renderBoard() {
+  const b = $("#board");
+  b.innerHTML = poll.options.map(o => `
+    <article class="card" data-id="${esc(o.id)}">
+      <div class="card-head"><span class="no">[${esc(o.no)}]</span><span class="tag">${esc(o.tagline)}</span>
+        <span class="count" title="붙은 스티커"><b>0</b><small>장</small></span></div>
+      <div class="card-body">
+        <h3 class="name">${esc(o.name)}</h3>
+        <div class="en">${esc(o.en)}</div>
+        <div class="parts">${(o.parts || []).map(([k, v]) => `<div class="chip"><b>${esc(k)}</b><small>${esc(v)}</small></div>`).join('<span class="plus">+</span>')}</div>
+        ${o.meaning ? `<div class="meaning"><span>의미</span>${esc(o.meaning)}</div>` : ""}
+      </div>
+      <div class="zone" tabindex="0" role="button" aria-label="${esc(o.no)} ${esc(o.name)}에 스티커 붙이기">
+        <span class="hint">여기를 눌러 스티커 붙이기</span><span class="st ghost"></span>
+      </div>
+    </article>`).join("");
+  b.querySelectorAll(".zone").forEach(z => {
+    const id = z.closest(".card").dataset.id, ghost = z.querySelector(".ghost");
+    z.addEventListener("click", e => { const r = z.getBoundingClientRect(); stick(id, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height, z); });
+    z.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); stick(id, .15 + Math.random() * .7, .2 + Math.random() * .6, z); } });
+    z.addEventListener("mousemove", e => {
+      if (phase() !== "open") return ghost.classList.remove("show");
+      const r = z.getBoundingClientRect(); ghost.className = `st ghost show c${myColor}`;
+      ghost.style.left = e.clientX - r.left + "px"; ghost.style.top = e.clientY - r.top + "px";
+    });
+  });
+  $("#bars").innerHTML = poll.options.map(o => `
+    <div class="bar" data-id="${esc(o.id)}"><div class="lbl"><em>${esc(o.no)}</em>${esc(o.name)}</div>
+      <div class="track"><div class="fill"></div></div><div class="num"><b>0</b>장 · <span>0</span>%</div></div>`).join("");
+  renderStickers(); renderStatus();
+}
+
+const rot = id => { let h = 0; for (const c of String(id)) h = (h * 31 + c.charCodeAt(0)) | 0; return (h % 40) - 20; };
+function placeEl(z, s, pop) {
+  let el = z.querySelector(`.st[data-id="${CSS.escape(s.id)}"]`);
+  if (!el) { el = document.createElement("span"); el.dataset.id = s.id; z.appendChild(el); }
+  /* 스티커가 칸 밖으로 나가지 않게 반지름만큼 안쪽으로 */
+  const w = z.clientWidth || 300, h = z.clientHeight || 160, r = 17;
+  el.style.left = Math.min(Math.max(s.x * w, r), w - r) + "px";
+  el.style.top = Math.min(Math.max(s.y * h, r), h - r) + "px";
+  el.style.setProperty("--rot", rot(s.id) + "deg");
+  el.className = `st c${(s.color || 0) % COLORS}${s.id === mineId ? " mine" : ""}${s.pending ? " pending" : ""}${pop ? " pop" : ""}`;
+}
+let lastCounts = {};
+function renderStickers(popId) {
+  const zones = {};
+  document.querySelectorAll(".card").forEach(c => zones[c.dataset.id] = c.querySelector(".zone"));
+  document.querySelectorAll(".zone .st:not(.ghost)").forEach(el => { const s = stickers.get(el.dataset.id); if (!s || zones[s.option_id] !== el.parentNode) el.remove(); });
+  const counts = {};
+  for (const s of stickers.values()) { const z = zones[s.option_id]; if (!z) continue; counts[s.option_id] = (counts[s.option_id] || 0) + 1; placeEl(z, s, s.id === popId); }
+  const total = Object.values(counts).reduce((a, b) => a + b, 0), max = Math.max(1, ...Object.values(counts));
+  const mine = mineId && stickers.get(mineId);
+  document.querySelectorAll(".card").forEach(c => {
+    const id = c.dataset.id, n = counts[id] || 0, b = c.querySelector(".count");
+    if (b.firstChild.textContent !== String(n)) { b.firstChild.textContent = n; if (lastCounts[id] !== undefined) { b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); } }
+    c.querySelector(".zone").classList.toggle("has", n > 0);
+    c.classList.toggle("picked", !!mine && mine.option_id === id);
+  });
+  document.querySelectorAll(".bar").forEach(bar => {
+    const n = counts[bar.dataset.id] || 0;
+    bar.querySelector(".fill").style.width = (n / max * 100) + "%";
+    bar.querySelector(".num b").textContent = n;
+    bar.querySelector(".num span").textContent = total ? Math.round(n / total * 100) : 0;
+  });
+  lastCounts = counts;
+  $("#total").textContent = total;
+  const o = mine && poll.options.find(o => o.id === mine.option_id);
+  $("#mineText").innerHTML = o ? `내 스티커: <b>${esc(o.no)} ${esc(o.name)}</b>` : "아직 스티커를 붙이지 않았습니다";
+  $("#btnRemove").classList.toggle("hidden", !o);
+}
+
+/* ---------- 스티커 붙이기 ---------- */
+let busy = false;
+async function stick(optionId, x, y) {
+  const ph = phase();
+  if (ph !== "open") return toast(ph === "before" ? "아직 투표 시작 전입니다." : "투표가 마감되었습니다.", true);
+  if (busy) return;
+  busy = true;
+  x = Math.min(Math.max(x, 0), 1); y = Math.min(Math.max(y, 0), 1);
+  const prev = mineId && stickers.get(mineId) ? { ...stickers.get(mineId) } : null;
+  const tmp = mineId || "pending";
+  stickers.set(tmp, { id: tmp, option_id: optionId, x, y, color: myColor, pending: true });
+  if (!mineId) mineId = tmp;
+  renderStickers(tmp);
+  try {
+    const id = await api.place(optionId, x, y, myColor);
+    stickers.delete(tmp); stickers.set(id, { id, option_id: optionId, x, y, color: myColor }); mineId = id;
+    renderStickers(id);
+    const o = poll.options.find(o => o.id === optionId);
+    toast(prev && prev.option_id !== optionId ? `스티커를 ${o.no} ${o.name}(으)로 옮겼습니다.` : prev ? "스티커 위치를 옮겼습니다." : `${o.no} ${o.name}에 스티커를 붙였습니다!`);
+  } catch (e) {
+    stickers.delete(tmp);
+    if (prev) stickers.set(prev.id, prev); else mineId = null;
+    renderStickers(); toast(msg(e), true); refresh();
+  } finally { busy = false; }
+}
+$("#btnRemove").onclick = async () => {
+  if (!mineId || !confirm("붙인 스티커를 뗄까요?")) return;
+  const prev = stickers.get(mineId);
+  try { await api.remove(); stickers.delete(mineId); mineId = null; renderStickers(); toast("스티커를 뗐습니다."); }
+  catch (e) { if (prev) stickers.set(prev.id, prev); toast(msg(e), true); }
+};
+
+function renderSwatches() {
+  const w = $("#swatches"); w.querySelectorAll(".sw").forEach(b => b.remove());
+  for (let i = 0; i < COLORS; i++) {
+    const b = document.createElement("button"); b.type = "button"; b.className = `sw c${i}`; b.style.background = "var(--c)";
+    b.setAttribute("aria-label", `색 ${i + 1}`); b.setAttribute("aria-pressed", i === myColor);
+    b.onclick = () => {
+      myColor = i; ls.set("vote.color", i); renderSwatches();
+      const m = mineId && stickers.get(mineId);
+      if (m && phase() === "open") stick(m.option_id, m.x, m.y);
+    };
+    w.appendChild(b);
+  }
+}
+
+/* ---------- 실시간 ---------- */
+const handlers = {
+  sticker(s) { if (!s || s.poll_id && s.poll_id !== POLL) return; const isNew = !stickers.has(s.id); stickers.set(s.id, { id: s.id, option_id: s.option_id, x: s.x, y: s.y, color: s.color }); renderStickers(isNew ? s.id : null); },
+  gone(id) { if (stickers.delete(id)) { if (id === mineId) mineId = null; renderStickers(); } },
+  poll(p) { poll = { ...poll, ...p }; renderStatus(); },
+  status(s) { live = s; renderStatus(); if (s === "off") setTimeout(refresh, 3000); },
+  reload() { refresh(); },
+};
+async function refresh() {
+  try {
+    const [p, list, mine] = await Promise.all([api.poll(), api.stickers(), api.mine()]);
+    if (!p) return;
+    const optsChanged = JSON.stringify(p.options) !== JSON.stringify(poll?.options);
+    poll = p; mineId = mine || null;
+    stickers.clear(); for (const s of list) stickers.set(s.id, s);
+    if (optsChanged) renderBoard(); else { renderStickers(); renderStatus(); }
+  } catch (e) { console.warn("새로고침 실패", e); }
+}
+
+/* ---------- 공유 ---------- */
+const shareUrl = () => location.origin + location.pathname + (POLL !== "namdong" ? `?poll=${encodeURIComponent(POLL)}` : "");
+const shareMsg = () => `[법인명 투표] 남동 데이터센터 법인명 후보 중 마음에 드는 이름에 스티커를 붙여주세요!\n링크를 열면 바로 참여할 수 있고, 현황도 실시간으로 볼 수 있습니다.${poll?.closes_at ? `\n마감: ${fmt(poll.closes_at)}` : ""}\n※ 결과는 법인명 선정에 참고하며, 최다 득표 이름이 반드시 선정되는 것은 아닙니다.\n\n👉 ${shareUrl()}`;
+async function copy(text, done) {
+  try { await navigator.clipboard.writeText(text); return toast(done); } catch {}
+  const t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", ""); t.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+  document.body.appendChild(t); t.select(); t.setSelectionRange(0, text.length);
+  let ok = false; try { ok = document.execCommand("copy"); } catch {}
+  t.remove();
+  if (ok) toast(done); else { $("#link").focus(); $("#link").select(); toast("자동 복사가 안 되는 화면입니다. 링크를 길게 눌러 복사해 주세요.", true); }
+}
+function initShare() {
+  $("#link").value = shareUrl();
+  $("#link").onclick = e => e.target.select();
+  $("#btnCopy").onclick = () => copy(shareUrl(), "링크를 복사했습니다. 카톡이나 이메일에 붙여넣어 보내주세요.");
+  $("#btnCopyMsg").onclick = () => copy(shareMsg(), "안내 문구와 링크를 복사했습니다. 카톡 대화창에 붙여넣어 주세요.");
+  $("#btnMail").onclick = e => { e.preventDefault(); location.href = `mailto:?subject=${encodeURIComponent("[법인명 투표] 남동 데이터센터 법인명 스티커 보드")}&body=${encodeURIComponent(shareMsg())}`; };
+  if (navigator.share) { $("#btnShare").classList.remove("hidden"); $("#btnShare").onclick = () => navigator.share({ title: "법인명 스티커 보드", text: shareMsg().replace(/\n\n👉 .*$/, ""), url: shareUrl() }).catch(() => {}); }
+}
+
+/* ---------- 이름 제안 ---------- */
+$("#proposeForm").onsubmit = async e => {
+  e.preventDefault();
+  const f = e.target, btn = $("#btnPropose");
+  btn.disabled = true;
+  try {
+    await api.propose(f.name.value.trim(), f.reason.value.trim(), f.proposer.value.trim());
+    const n = +(ls.get("vote.proposed." + POLL) || 0) + 1; ls.set("vote.proposed." + POLL, n);
+    f.name.value = ""; f.reason.value = "";
+    $("#proposeMsg").textContent = `제안이 담당자에게 전달되었습니다. 감사합니다! (이 기기에서 보낸 제안 ${n}건)`;
+    toast("제안을 보냈습니다. 감사합니다!");
+  } catch (err) { toast(msg(err), true); }
+  finally { btn.disabled = false; }
+};
+
+/* ---------- 관리자 ---------- */
+const dlg = $("#dlg");
+const toKst = iso => { if (!iso) return ""; const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date(iso)).map(x => [x.type, x.value])); return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`; };
+const fromKst = v => v ? new Date(v + ":00+09:00").toISOString() : null;
+async function showAdmin() {
+  const ok = await api.admin.session().catch(() => false);
+  $("#loginBox").classList.toggle("hidden", ok); $("#adminBox").classList.toggle("hidden", !ok);
+  if (!ok) return;
+  $("#adOpen").value = toKst(poll?.opens_at); $("#adClose").value = toKst(poll?.closes_at); $("#adErr").textContent = "";
+  loadAdminData();
+}
+let lastProps = [];
+async function loadAdminData() {
+  try {
+    const s = await api.admin.stats();
+    $("#sStickers").textContent = s.stickers; $("#sDevices").textContent = s.devices; $("#sSuspect").textContent = s.suspect;
+  } catch (e) { $("#adErr").textContent = msg(e); }
+  try {
+    lastProps = await api.admin.proposals();
+    $("#pCount").textContent = `(${lastProps.length}건)`;
+    $("#props").innerHTML = lastProps.length ? lastProps.map(p => `<li><div><div class="pn">${esc(p.name)}</div>${p.reason ? `<div class="pr">${esc(p.reason)}</div>` : ""}<div class="pm">${esc(p.proposer || "이름 없음")} · ${fmt(p.created_at)}</div></div><button class="btn sm danger" data-del="${esc(p.id)}" type="button">삭제</button></li>`).join("") : `<li class="sub">아직 받은 제안이 없습니다.</li>`;
+  } catch (e) { $("#adErr").textContent = msg(e); }
+}
+$("#btnAdmin").onclick = () => { dlg.showModal(); showAdmin(); };
+$("#dlgClose").onclick = () => dlg.close();
+$("#loginBox").onsubmit = async e => {
+  e.preventDefault(); $("#loginErr").textContent = "";
+  try { await api.admin.signIn($("#adEmail").value.trim(), $("#adPw").value); $("#adPw").value = ""; showAdmin(); }
+  catch (err) { $("#loginErr").textContent = msg(err); }
+};
+$("#adSave").onclick = async () => {
+  const a = fromKst($("#adOpen").value), b = fromKst($("#adClose").value);
+  if (a && b && a >= b) return $("#adErr").textContent = "마감이 시작보다 뒤여야 합니다.";
+  try { await api.admin.setPeriod(a, b); poll = { ...poll, opens_at: a, closes_at: b }; renderStatus(); $("#adErr").textContent = ""; toast("투표 기간을 저장했습니다."); }
+  catch (e) { $("#adErr").textContent = msg(e); }
+};
+$("#props").onclick = async e => {
+  const id = e.target.dataset?.del; if (!id || !confirm("이 제안을 삭제할까요?")) return;
+  try { await api.admin.delProposal(id); loadAdminData(); } catch (err) { toast(msg(err), true); }
+};
+$("#adReload").onclick = loadAdminData;
+$("#adCopyProps").onclick = () => copy(lastProps.map((p, i) => `${i + 1}. ${p.name}${p.reason ? ` - ${p.reason}` : ""} (${p.proposer || "이름 없음"}, ${fmt(p.created_at)})`).join("\n") || "받은 제안 없음", "제안 목록을 복사했습니다.");
+$("#adLogout").onclick = async () => { await api.admin.signOut(); showAdmin(); };
+
+/* ---------- 공통 ---------- */
+function msg(e) {
+  const m = e?.message || String(e);
+  if (/Failed to fetch|NetworkError|network/i.test(m)) return "인터넷 연결을 확인해 주세요.";
+  if (/Invalid login/i.test(m)) return "이메일 또는 비밀번호가 맞지 않습니다.";
+  return m;
+}
+let toastT;
+function toast(t, bad) { const el = $("#toast"); el.textContent = t; el.className = "toast show" + (bad ? " err" : ""); clearTimeout(toastT); toastT = setTimeout(() => el.className = "toast" + (bad ? " err" : ""), 3200); }
+
+(async function start() {
+  renderSwatches(); initShare();
+  try {
+    if (DEMO) api = await demoBackend();
+    else {
+      const cfg = await fetch("config.json", { cache: "no-store" }).then(r => r.json()).catch(() => ({}));
+      if (!cfg.supabaseUrl || !cfg.supabaseKey || !window.supabase) throw new Error("서버 설정이 없어 투표 보드를 열 수 없습니다.");
+      api = supabaseBackend(cfg);
+    }
+    await refresh();
+    if (!poll) throw new Error("투표가 준비되지 않았습니다. 관리자에게 문의해 주세요.");
+    api.subscribe(handlers);
+  } catch (e) {
+    $("#statusText").textContent = msg(e); $("#led").className = "led off";
+    $("#board").innerHTML = `<div class="panel" style="padding:24px;grid-column:1/-1">${esc(msg(e))}</div>`;
+    return;
+  }
+  setInterval(renderStatus, 30000);
+  setInterval(refresh, 60000);   // 실시간 연결이 끊겼을 때를 대비한 주기적 확인
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => renderStickers(), 150); });
+})();
+</script>
+</body>
+</html>
