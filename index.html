@@ -231,8 +231,6 @@ dialog::backdrop{background:rgba(10,20,35,.5)}
       <input id="link" readonly aria-label="투표 링크">
       <button class="btn primary" id="btnCopy" type="button">링크 복사</button>
       <button class="btn kakao" id="btnCopyMsg" type="button">카톡용 문구 복사</button>
-      <a class="btn" id="btnMail" href="#">이메일로 보내기</a>
-      <button class="btn hidden" id="btnShare" type="button">공유…</button>
     </div>
   </section>
 
@@ -587,8 +585,6 @@ function initShare() {
   $("#link").onclick = e => e.target.select();
   $("#btnCopy").onclick = () => copy(shareUrl(), "링크를 복사했습니다. 카톡이나 이메일에 붙여넣어 보내주세요.");
   $("#btnCopyMsg").onclick = () => copy(shareMsg(), "안내 문구와 링크를 복사했습니다. 카톡 대화창에 붙여넣어 주세요.");
-  $("#btnMail").onclick = e => { e.preventDefault(); location.href = `mailto:?subject=${encodeURIComponent("[법인명 투표] 남동 데이터센터 법인명 스티커 보드")}&body=${encodeURIComponent(shareMsg())}`; };
-  if (navigator.share) { $("#btnShare").classList.remove("hidden"); $("#btnShare").onclick = () => navigator.share({ title: "법인명 스티커 보드", text: shareMsg().replace(/\n\n👉 .*$/, ""), url: shareUrl() }).catch(() => {}); }
 }
 
 /* ---------- 이름 제안 ---------- */
